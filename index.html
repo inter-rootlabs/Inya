@@ -361,6 +361,20 @@
       color: var(--charcoal);
     }
 
+    .button.accent {
+      border: 0;
+      color: var(--cream);
+      background: var(--rose);
+      box-shadow: 0 16px 36px rgba(169, 111, 111, 0.2);
+      cursor: pointer;
+    }
+
+    .button.accent:hover,
+    .button.accent:focus-visible {
+      color: var(--charcoal);
+      background: var(--amber);
+    }
+
     main {
       overflow: hidden;
     }
@@ -584,46 +598,69 @@
     }
 
     .menu-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
+      display: flex;
+      gap: 20px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      padding-bottom: 24px;
+      margin-bottom: -8px;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .menu-grid::-webkit-scrollbar {
+      display: none;
     }
 
     .menu-card {
       position: relative;
-      min-height: 178px;
-      padding: 24px;
+      flex: 0 0 calc(33.333% - 14px);
+      scroll-snap-align: start;
+      display: flex;
+      flex-direction: column;
       border: 1px solid rgba(169, 111, 111, 0.42);
-      border-left: 4px solid transparent;
       border-radius: var(--radius-md);
       background: rgba(201, 180, 154, 0.2);
       box-shadow: 0 12px 30px rgba(30, 30, 30, 0.045);
       transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
+      overflow: hidden;
     }
 
     .menu-card:hover {
       transform: translateY(-5px);
-      border-left-color: var(--accent);
+      border-color: var(--accent);
       background: rgba(201, 180, 154, 0.28);
       box-shadow: var(--soft-shadow);
     }
 
-    .menu-icon {
-      display: inline-grid;
-      place-items: center;
-      width: 44px;
-      height: 44px;
-      border-radius: 12px;
-      color: var(--accent);
-      background: rgba(217, 133, 166, 0.14);
-      font-size: 1.35rem;
-      line-height: 1;
-      margin-bottom: 18px;
+    .menu-card-image {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      background: rgba(30, 30, 30, 0.05);
+      overflow: hidden;
+    }
+
+    .menu-card-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 400ms ease;
+    }
+
+    .menu-card:hover .menu-card-image img {
+      transform: scale(1.05);
+    }
+
+    .menu-card-content {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
     }
 
     .menu-card h3 {
       font-size: 1.42rem;
       margin-bottom: 10px;
+      margin-top: 0;
     }
 
     .menu-card p {
@@ -636,6 +673,11 @@
       color: var(--rose);
       text-align: center;
       font-weight: 600;
+    }
+
+    .view-menu-btn-container {
+      margin-top: 32px;
+      text-align: center;
     }
 
     .experience {
@@ -967,8 +1009,8 @@
         min-height: 420px;
       }
 
-      .menu-grid {
-        grid-template-columns: repeat(2, 1fr);
+      .menu-card {
+        flex: 0 0 calc(50% - 10px);
       }
 
       .experience-grid {
@@ -1032,14 +1074,15 @@
         min-height: 320px;
       }
 
-      .menu-grid,
       .experience-grid {
         grid-template-columns: 1fr;
       }
 
       .menu-card {
-        min-height: 0;
+        flex: 0 0 85%;
       }
+
+      
 
       .location-panel {
         padding: 24px 18px;
@@ -1050,6 +1093,229 @@
         padding: 12px 10px;
       }
     }
+  
+    .carousel-container.relative {
+      position: relative;
+    }
+
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255, 250, 245, 0.9);
+      border: 1px solid rgba(169, 111, 111, 0.2);
+      color: var(--rose);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 10;
+      box-shadow: 0 4px 12px rgba(30,30,30,0.08);
+      transition: all 0.2s ease;
+    }
+
+    .carousel-arrow:hover {
+      background: var(--white);
+      color: var(--accent);
+      box-shadow: 0 6px 16px rgba(30,30,30,0.12);
+      transform: translateY(-50%) scale(1.05);
+    }
+
+    .carousel-arrow svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .carousel-arrow.left-arrow {
+      left: -20px;
+    }
+
+    .carousel-arrow.right-arrow {
+      right: -20px;
+    }
+
+    @media (max-width: 768px) {
+      .carousel-arrow {
+        display: none; /* Hide arrows on mobile where users naturally swipe */
+      }
+    }
+
+  
+    /* Menu Drawer Core Styles */
+    .menu-drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(30, 30, 30, 0.4);
+      backdrop-filter: blur(5px);
+      z-index: 100;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    .menu-drawer-overlay.is-active {
+      opacity: 1;
+      visibility: visible;
+    }
+    .menu-drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      max-width: 550px;
+      background: var(--cream);
+      box-shadow: -10px 0 40px rgba(0,0,0,0.12);
+      z-index: 101;
+      display: flex;
+      flex-direction: column;
+      transform: translateX(100%);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .menu-drawer.is-active {
+      transform: translateX(0);
+    }
+    .menu-drawer-header {
+      padding: 24px 32px;
+      border-bottom: 1px solid rgba(169, 111, 111, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--cream);
+      z-index: 2;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+    }
+    .menu-drawer-header h2 {
+      margin: 0;
+      font-size: 1.8rem;
+      color: var(--charcoal);
+    }
+    .menu-drawer-close {
+      background: rgba(217, 133, 166, 0.15);
+      border: none;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--rose);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .menu-drawer-close:hover {
+      background: rgba(217, 133, 166, 0.3);
+      transform: scale(1.05);
+    }
+    .menu-drawer-close svg {
+      width: 22px;
+      height: 22px;
+    }
+    .menu-drawer-nav {
+      display: flex;
+      gap: 8px;
+      padding: 14px 32px;
+      overflow-x: auto;
+      border-bottom: 1px solid rgba(169, 111, 111, 0.13);
+      background: rgba(245, 240, 235, 0.96);
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .menu-drawer-nav::-webkit-scrollbar {
+      display: none;
+    }
+    .menu-drawer-nav button {
+      flex: 0 0 auto;
+      border: 1px solid rgba(169, 111, 111, 0.24);
+      border-radius: 999px;
+      padding: 8px 12px;
+      color: var(--rose);
+      background: rgba(255, 250, 245, 0.72);
+      font: inherit;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 180ms ease, border-color 180ms ease, color 180ms ease;
+      white-space: nowrap;
+    }
+    .menu-drawer-nav button:hover,
+    .menu-drawer-nav button:focus-visible {
+      color: var(--cream);
+      background: var(--accent);
+      border-color: var(--accent);
+      outline: 0;
+    }
+    .menu-drawer-body {
+      padding: 32px;
+      overflow-y: auto;
+      flex: 1;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(169, 111, 111, 0.4) transparent;
+    }
+    .menu-drawer-body::-webkit-scrollbar {
+      width: 6px;
+    }
+    .menu-drawer-body::-webkit-scrollbar-thumb {
+      background-color: rgba(169, 111, 111, 0.4);
+      border-radius: 6px;
+    }
+    .drawer-category {
+      margin-bottom: 40px;
+    }
+    .drawer-category-title {
+      font-family: "Playfair Display", serif;
+      color: var(--rose);
+      font-size: 1.6rem;
+      margin-bottom: 20px;
+      border-bottom: 1px dashed rgba(169, 111, 111, 0.3);
+      padding-bottom: 10px;
+    }
+    .drawer-item {
+      margin-bottom: 20px;
+    }
+    .drawer-item-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 16px;
+      margin-bottom: 6px;
+    }
+    .drawer-item-title {
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: var(--charcoal);
+    }
+    .drawer-item-price {
+      font-weight: 700;
+      color: var(--accent);
+      font-size: 1.05rem;
+      white-space: nowrap;
+    }
+    .drawer-item-desc {
+      margin: 0;
+      font-size: 0.95rem;
+      color: rgba(30,30,30,0.65);
+      line-height: 1.5;
+    }
+    @media (max-width: 620px) {
+      .menu-drawer {
+        max-width: 100%;
+      }
+      .menu-drawer-header {
+        padding: 20px 24px;
+      }
+      .menu-drawer-nav {
+        padding: 12px 24px;
+      }
+      .menu-drawer-body {
+        padding: 24px;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -1085,7 +1351,7 @@
       </video>
       <div class="hero-content reveal">
         <img class="hero-logo" src="assets/images/logo.png" alt="INYA Cafe logo">
-        <p class="eyebrow">Boutique neighbourhood cafe</p>
+        <p class="eyebrow">Friendly neighbourhood cafe</p>
         <h1>A quiet corner in JP Nagar</h1>
         <p class="hero-copy">Coffee · Food · Board Games · Good Vibes — JP Nagar, Bengaluru</p>
         <div class="hero-actions">
@@ -1100,7 +1366,7 @@
         <div class="about-copy reveal">
           <p class="tagline accent">The vibe</p>
           <h2>Hidden in plain sight.</h2>
-          <p>Tucked away on 20th Main in Marenahalli, INYA is the kind of cafe you stumble upon and instantly want to keep to yourself. Cozy interiors, a rooftop that changes the mood entirely, Vietnamese iced coffee, board games, and a menu that surprises — every visit feels like the first.</p>
+          <p>Tucked away on 20th Main in Marenahalli, INYA is the kind of cafe you stumble upon and instantly want to keep to yourself. Cozy interiors, a rooftop that changes the mood entirely, <strong> Pet Friendly </strong>, board games, and a menu that surprises . Every visit feels like the first.</p>
           <div class="chips" aria-label="Cafe highlights">
             <span class="chip">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3l-5.6 2.9 1.1-6.2L3 9.6l6.2-.9L12 3Z"></path></svg>
@@ -1153,39 +1419,75 @@
           <p class="tagline accent">Cafe favourites</p>
           <h2>What we love making</h2>
         </div>
-        <div class="menu-grid">
+                <div class="carousel-container relative">
+          <button class="carousel-arrow left-arrow" aria-label="Previous">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+          </button>
+          
+          <div class="menu-grid" id="menuCarousel">
           <article class="menu-card reveal">
-            <div class="menu-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 8h10v5a5 5 0 0 1-5 5 5 5 0 0 1-5-5V8Z"></path><path d="M16 10h1.5a2.5 2.5 0 0 1 0 5H16"></path><path d="M5 21h12"></path><path d="M8 3v2"></path><path d="M12 3v2"></path></svg></div>
-            <h3>Vietnamese Iced Coffee</h3>
-            <p>Cold, bold, and deeply satisfying.</p>
+            <div class="menu-card-image">
+              <img src="assets/images/vietnamese-iced-coffee.jpg" alt="Vietnamese Iced Coffee" loading="lazy">
+            </div>
+            <div class="menu-card-content">
+              <h3>Vietnamese Iced Coffee</h3>
+              <p>Cold, bold, and deeply satisfying.</p>
+            </div>
           </article>
           <article class="menu-card reveal">
-            <div class="menu-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 8h10v5a5 5 0 0 1-5 5 5 5 0 0 1-5-5V8Z"></path><path d="M16 10h1.5a2.5 2.5 0 0 1 0 5H16"></path><path d="M5 21h12"></path><path d="M8 3v2"></path><path d="M12 3v2"></path></svg></div>
-            <h3>Flat White</h3>
-            <p>Silky and balanced, our everyday staple.</p>
+            <div class="menu-card-image">
+              <img src="assets/images/flat-white.jpg" alt="Flat White" loading="lazy">
+            </div>
+            <div class="menu-card-content">
+              <h3>Flat White</h3>
+              <p>Silky and balanced, our everyday staple.</p>
+            </div>
           </article>
           <article class="menu-card reveal">
-            <div class="menu-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M16.8 13.2c0 4-2.2 6.8-4.8 6.8s-4.8-2.8-4.8-6.8C7.2 8.6 9.4 4 12 4s4.8 4.6 4.8 9.2Z"></path><path d="M9 13h6"></path></svg></div>
-            <h3>Scrambled Eggs</h3>
-            <p>Chef's presentation, home-style comfort.</p>
+            <div class="menu-card-image">
+              <img src="assets/images/scrambled-eggs.jpg" alt="Scrambled Eggs" loading="lazy">
+            </div>
+            <div class="menu-card-content">
+              <h3>Scrambled Eggs</h3>
+              <p>Chef's presentation, home-style comfort.</p>
+            </div>
           </article>
           <article class="menu-card reveal">
-            <div class="menu-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m4 8 8-4 8 4v9a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V8Z"></path><path d="M4 11h16"></path><path d="M8 15h8"></path></svg></div>
-            <h3>BBQ Chicken Sandwich</h3>
-            <p>Smoky, hearty, crowd favourite.</p>
+            <div class="menu-card-image">
+              <img src="assets/images/bbq-chicken-sandwich.jpg" alt="BBQ Chicken Sandwich" loading="lazy">
+            </div>
+            <div class="menu-card-content">
+              <h3>BBQ Chicken Sandwich</h3>
+              <p>Smoky, hearty, crowd favourite.</p>
+            </div>
           </article>
           <article class="menu-card reveal">
-            <div class="menu-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M17.5 5.8c2.2 2.2 2.4 6.6.4 10.1-2.1 3.6-5.9 5.2-8.6 3.6-2.7-1.6-3.2-5.9-1.1-9.5 2-3.5 6.1-6.5 9.3-4.2Z"></path><circle cx="12.4" cy="14.1" r="2.3"></circle></svg></div>
-            <h3>Crostini</h3>
-            <p>Avocado and more — clean flavours done right.</p>
+            <div class="menu-card-image">
+              <img src="assets/images/crostini.jpg" alt="Crostini" loading="lazy">
+            </div>
+            <div class="menu-card-content">
+              <h3>Crostini</h3>
+              <p>Avocado and more — clean flavours done right.</p>
+            </div>
           </article>
           <article class="menu-card reveal">
-            <div class="menu-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 9h10l-1 11H8L7 9Z"></path><path d="M8 9 7 4"></path><path d="M12 9V3"></path><path d="m16 9 1-5"></path><path d="M9 13h6"></path></svg></div>
-            <h3>Yam &amp; Tendli Chips</h3>
-            <p>Our most unique bite. Try it once.</p>
+            <div class="menu-card-image">
+              <img src="assets/images/yam-chips.webp" alt="Yam & Tendli Chips" loading="lazy">
+            </div>
+            <div class="menu-card-content">
+              <h3>Yam &amp; Tendli Chips</h3>
+              <p>Our most unique bite. Try it once.</p>
+            </div>
           </article>
+          </div>
+          <button class="carousel-arrow right-arrow" aria-label="Next">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+          </button>
         </div>
         <p class="menu-note reveal">Full menu available in-store. Something new always in the works.</p>
+        <div class="view-menu-btn-container reveal">
+          <button class="button accent" id="openMenuBtn" type="button">View Full Menu</button>
+        </div>
       </div>
     </section>
 
@@ -1335,6 +1637,744 @@
     } else {
       revealItems.forEach((item) => item.classList.add("is-visible"));
     }
+  
+    // Carousel Arrows
+    const menuCarousel = document.getElementById('menuCarousel');
+    const leftArrow = document.querySelector('.left-arrow');
+    const rightArrow = document.querySelector('.right-arrow');
+
+    if (menuCarousel && leftArrow && rightArrow) {
+      leftArrow.addEventListener('click', () => {
+        const scrollAmount = menuCarousel.clientWidth * 0.8;
+        menuCarousel.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+      });
+
+      rightArrow.addEventListener('click', () => {
+        const scrollAmount = menuCarousel.clientWidth * 0.8;
+        menuCarousel.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+      });
+    }
+
   </script>
+<div class="menu-drawer-overlay" id="menuDrawerOverlay"></div>
+<div class="menu-drawer" id="menuDrawer">
+  <div class="menu-drawer-header">
+    <h2>Explore Our Menu</h2>
+    <button class="menu-drawer-close" id="closeDrawerBtn" aria-label="Close menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <nav class="menu-drawer-nav" aria-label="Menu categories">
+    <button type="button" data-menu-target="menu-breakfast">Breakfast</button>
+    <button type="button" data-menu-target="menu-bagels">Bagels</button>
+    <button type="button" data-menu-target="menu-salads">Salads</button>
+    <button type="button" data-menu-target="menu-pide">Pide</button>
+    <button type="button" data-menu-target="menu-crostini">Crostini</button>
+    <button type="button" data-menu-target="menu-dessert">Dessert</button>
+    <button type="button" data-menu-target="menu-nibbles">Nibbles</button>
+    <button type="button" data-menu-target="menu-sandwiches">Sandwiches</button>
+    <button type="button" data-menu-target="menu-specialty-coffees">Specialty Coffees</button>
+    <button type="button" data-menu-target="menu-espresso-bar">Espresso Bar</button>
+    <button type="button" data-menu-target="menu-classics">Classics</button>
+    <button type="button" data-menu-target="menu-hot-chocolate">Hot Chocolate</button>
+    <button type="button" data-menu-target="menu-teas">Teas</button>
+    <button type="button" data-menu-target="menu-cold-coffee">Cold Coffee</button>
+    <button type="button" data-menu-target="menu-handcrafted-brews">Handcrafted Brews</button>
+    <button type="button" data-menu-target="menu-coolers">Coolers</button>
+    <button type="button" data-menu-target="menu-milkshakes">Milkshakes</button>
+    <button type="button" data-menu-target="menu-hot-beverage">Hot Beverage</button>
+    <button type="button" data-menu-target="menu-iced-beverages">Iced Beverages</button>
+    <button type="button" data-menu-target="menu-pour-over">Pour Over</button>
+  </nav>
+  <div class="menu-drawer-body">
+    <div class="drawer-category" id="menu-breakfast">
+      <h3 class="drawer-category-title">Breakfast</h3>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Stacked Pancakes (Berry & Caramelized Banana)</span>
+          <span class="drawer-item-price">₹320.00</span>
+        </div>
+        <p class="drawer-item-desc">Fluffy, golden pancakes with juicy homemade mixed berries jam, caramelized banana, and a drizzle of rich maple syrup.</p>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">All Day Breakfast</span>
+          <span class="drawer-item-price">₹380.00</span>
+        </div>
+        <p class="drawer-item-desc">Artisan toast, sautéed mushrooms and cherry tomatoes, sliced avocado and choice of your egg served with achari hollandaise on the side a tangy, pickled spice infused take on the classic creamy sauce</p>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Eggs On Avocado W Achari Hollandaise</span>
+          <span class="drawer-item-price">₹295.00</span>
+        </div>
+        <p class="drawer-item-desc">Creamy smashed avocado spread over crisp sour dough bread, topped with two perfectly cooked eggs of your choice, and finished with our signature achari hollandaise</p>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Honey Butter Toast</span>
+          <span class="drawer-item-price">₹285.00</span>
+        </div>
+        <p class="drawer-item-desc">Golden brioche soaked in vanilla custard, topped with honey-butter and a cloud of clotted cream sweet mornings in every bite.</p>
+      </div>
+    </div>
+    <div class="drawer-category" id="menu-bagels">
+      <h3 class="drawer-category-title">Bagels</h3>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Hummus & Pickled Veg</span>
+          <span class="drawer-item-price">₹285.00</span>
+        </div>
+        <p class="drawer-item-desc">A toasty bagel spread with creamy hummus, pickled veggies and crisp lettuce, olive oil. Bright, savory, and perfect for a satisfying bite any time of day.</p>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">3 Cheese & Caramelized Onions</span>
+          <span class="drawer-item-price">₹310.00</span>
+        </div>
+        <p class="drawer-item-desc">A toasty bagel with cream cheese, shredded cheddar and mozzarella, then crowned with sweet caramelized onion chutney & fresh arugula.</p>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Pizza Bagel</span>
+          <span class="drawer-item-price">₹340.00</span>
+        </div>
+        <p class="drawer-item-desc">A toasty bagel with herb-garlic butter, topped with rich marinara sauce, melted mozzarella, and chicken pepperoni slices. Pizza meets bagel, simply comforting.</p>
+      </div>
+    </div>
+    <div class="drawer-category" id="menu-salads">
+      <h3 class="drawer-category-title">Salads</h3>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Watermelon Feta</span>
+          <span class="drawer-item-price">₹175.00</span>
+        </div>
+        <p class="drawer-item-desc">A fresh & light salad with juicy fresh watermelon with feta over arugula and mint leaves. Dressed in a balsamic vinaigrette, a perfect dish for a warm afternoon</p>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Iron Feast</span>
+          <span class="drawer-item-price">₹220.00</span>
+        </div>
+        <p class="drawer-item-desc">A hearty bowl of greens with iceberg,baby spinach, quinoa, lentils. Cherry tomatoes, orange, pumpkin & sunflower seeds, feta and orange vinaigrette, wholesome, nourishing, and deeply satisfying.</p>
+      </div>
+    </div>
+    <div class="drawer-category" id="menu-pide">
+      <h3 class="drawer-category-title">Turkish Pide</h3>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Buffalo Chicken</span>
+          <span class="drawer-item-price">₹350.00</span>
+        </div>
+        <p class="drawer-item-desc">A crisp boat-shaped pide base piled high with juicy chicken tossed in tangy, spicy buffalo sauce. Topped with mozzarella cheese</p>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Creamed Corn & Spinach</span>
+          <span class="drawer-item-price">₹295.00</span>
+        </div>
+        <p class="drawer-item-desc">Golden pide filled with sweet corn, baby spinach, creamy sauce, and a cheesy-garlic finish.</p>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Thecha Shrimp</span>
+          <span class="drawer-item-price">₹375.00</span>
+        </div>
+        <p class="drawer-item-desc">Shrimp sautéed in fiery thecha a rustic maharashtrian chili-&-nut spice mix with roasted garlic, fresh herbs, and mozzarella.</p>
+      </div>
+    </div>
+    <div class="drawer-category" id="menu-crostini">
+      <h3 class="drawer-category-title">Crostini</h3>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Buffalo Chicken (Crostini)</span>
+          <span class="drawer-item-price">₹330.00</span>
+        </div>
+        <p class="drawer-item-desc">A warm garlic-herb butter brushed baguette layered w/ sour cream, fiery buffalo-tossed chicken, tangy feta. Spicy, mellow, and oh-so satisfying.</p>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Mediterranean</span>
+          <span class="drawer-item-price">₹250.00</span>
+        </div>
+        <p class="drawer-item-desc">A warm garlic-herb butter brushed baguette, topped with homemade hummus, crumbly feta, and grilled veggies</p>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Avocado & Sundried Tomato</span>
+          <span class="drawer-item-price">₹275.00</span>
+        </div>
+        <p class="drawer-item-desc">Soft smashed avocado over herb garlic butter, with sun-dried tomatoes and crunchy roasted almonds, a sweet-heat drizzle of chill-infused honey and a sprinkle of feta.</p>
+      </div>
+    </div>
+    <div class="drawer-category" id="menu-dessert">
+      <h3 class="drawer-category-title">Dessert</h3>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Toscano Dolce</span>
+          <span class="drawer-item-price">₹345.00</span>
+        </div>
+        <p class="drawer-item-desc">Soft vanilla cake gently soaked in a rich coffee elixir, coffee cream a perfect twist on classic tiramisu</p>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Isle Of Lime</span>
+          <span class="drawer-item-price">₹250.00</span>
+        </div>
+        <p class="drawer-item-desc">A refreshing tropical indulgence with biscoff crumble, lime & coconut cream cheese, coconut sauce, and a hint of mint</p>
+      </div>
+    </div>
+    <div class="drawer-category" id="menu-nibbles">
+      <h3 class="drawer-category-title">Nibbles</h3>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Yam Chips</span>
+          <span class="drawer-item-price">₹115.00</span>
+        </div>
+        <p class="drawer-item-desc">A twist your taste buds won't see coming thinly hand cut elephant foot yam, fried and seasoned with homemade secret spiced mix</p>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Tendli Fries</span>
+          <span class="drawer-item-price">₹115.00</span>
+        </div>
+        <p class="drawer-item-desc">Your new favourite sidekick to any meal spiced ivy gourd seasoned with homemade secret spice mix fried to golden perfection</p>
+      </div>
+    </div>
+    <div class="drawer-category" id="menu-sandwiches">
+      <h3 class="drawer-category-title">Sandwiches</h3>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Ham & Cheese</span>
+          <span class="drawer-item-price">₹425.00</span>
+        </div>
+        <p class="drawer-item-desc">Mustard, cheddar cheese, tomato, caramelized onion and chicken ham, fried egg on sourdough bread</p>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Roasted Veg</span>
+          <span class="drawer-item-price">₹340.00</span>
+        </div>
+        <p class="drawer-item-desc">Sour dough bread, pesto, hummus, grilled veg, feta cheese, tomato and lettuce.</p>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Bbq Chicken Sandwich</span>
+          <span class="drawer-item-price">₹380.00</span>
+        </div>
+        <p class="drawer-item-desc">Bbq mayo, lettuce, gherkins, bbq chicken, cheddar cheese, fried egg</p>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Egg Avocado And Bacon Sandwich</span>
+          <span class="drawer-item-price">₹360.00</span>
+        </div>
+        <p class="drawer-item-desc">Churmuri mayo, cheese, roman lettuce, chicken bacon, avocado, fried egg on sourdough bread</p>
+      </div>
+    </div>
+    <div class="drawer-category" id="menu-specialty-coffees">
+      <h3 class="drawer-category-title">Specialty Coffees</h3>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Ocean Iced Latte</span>
+          <span class="drawer-item-price">₹350.00</span>
+        </div>
+        <p class="drawer-item-desc">Layers of silky caramel syrup, aromatic butterfly pea tea, rich espresso, and warm milk, topped with a soft cloud of milk foam.</p>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Mediterranean Glow Iced Latte</span>
+          <span class="drawer-item-price">₹220.00</span>
+        </div>
+        <p class="drawer-item-desc">Sweet honey forms the base, followed by a burst of fresh orange juice, finished with a rich layer of espresso.</p>
+      </div>
+    </div>
+    <div class="drawer-category" id="menu-espresso-bar">
+      <h3 class="drawer-category-title">Espresso Bar</h3>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Espresso - Single</span>
+          <span class="drawer-item-price">₹130.00</span>
+        </div>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Espresso - Double</span>
+          <span class="drawer-item-price">₹150.00</span>
+        </div>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Americano</span>
+          <span class="drawer-item-price">₹160.00</span>
+        </div>
+      </div>
+    </div>
+    <div class="drawer-category" id="menu-classics">
+      <h3 class="drawer-category-title">Classics</h3>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Cappuccino</span>
+          <span class="drawer-item-price">₹180.00</span>
+        </div>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Latte</span>
+          <span class="drawer-item-price">₹180.00</span>
+        </div>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Café Latte</span>
+          <span class="drawer-item-price">₹180.00</span>
+        </div>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Flat White</span>
+          <span class="drawer-item-price">₹180.00</span>
+        </div>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Cortado</span>
+          <span class="drawer-item-price">₹175.00</span>
+        </div>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Macchiato</span>
+          <span class="drawer-item-price">₹175.00</span>
+        </div>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Mocha</span>
+          <span class="drawer-item-price">₹210.00</span>
+        </div>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Spanish Latte</span>
+          <span class="drawer-item-price">₹220.00</span>
+        </div>
+      </div>
+    </div>
+    <div class="drawer-category" id="menu-hot-chocolate">
+      <h3 class="drawer-category-title">Hot Chocolate</h3>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Classic Hot Choc</span>
+          <span class="drawer-item-price">₹210.00</span>
+        </div>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">S'mores</span>
+          <span class="drawer-item-price">₹250.00</span>
+        </div>
+        <p class="drawer-item-desc">A decadent hot chocolate topped with torched marshmallow for that classic campfire s'mores flavour.</p>
+      </div>
+    </div>
+    <div class="drawer-category" id="menu-teas">
+      <h3 class="drawer-category-title">Teas</h3>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Classic Hot Teas</span>
+          <span class="drawer-item-price">₹150.00</span>
+        </div>
+        <p class="drawer-item-desc">Our barista team will be happy to guide you through our curated tea collection.</p>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Iced Tea</span>
+          <span class="drawer-item-price">₹195.00</span>
+        </div>
+        <p class="drawer-item-desc">Flavors: passion fruit, apple, peach</p>
+      </div>
+    </div>
+    <div class="drawer-category" id="menu-cold-coffee">
+      <h3 class="drawer-category-title">Cold Crafted Coffee</h3>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Classic Cold Coffee</span>
+          <span class="drawer-item-price">₹190.00</span>
+        </div>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Irish Cold Coffee</span>
+          <span class="drawer-item-price">₹210.00</span>
+        </div>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Cold Mocha</span>
+          <span class="drawer-item-price">₹195.00</span>
+        </div>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Vietnamese Coffee</span>
+          <span class="drawer-item-price">₹215.00</span>
+        </div>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Iced Latte</span>
+          <span class="drawer-item-price">₹195.00</span>
+        </div>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Spanish Latte</span>
+          <span class="drawer-item-price">₹220.00</span>
+        </div>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Irish Latte</span>
+          <span class="drawer-item-price">₹210.00</span>
+        </div>
+      </div>
+    </div>
+    <div class="drawer-category" id="menu-handcrafted-brews">
+      <h3 class="drawer-category-title">Handcrafted Brews</h3>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Aeropress</span>
+          <span class="drawer-item-price">₹230.00</span>
+        </div>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Pour Over</span>
+          <span class="drawer-item-price">₹230.00</span>
+        </div>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Syphon</span>
+          <span class="drawer-item-price">₹260.00</span>
+        </div>
+      </div>
+    </div>
+    <div class="drawer-category" id="menu-coolers">
+      <h3 class="drawer-category-title">Coolers & Juices</h3>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Watermelon Juice</span>
+          <span class="drawer-item-price">₹120.00</span>
+        </div>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Lemon Mint Mojito</span>
+          <span class="drawer-item-price">₹150.00</span>
+        </div>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Orange Mint Mojito</span>
+          <span class="drawer-item-price">₹150.00</span>
+        </div>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Green Apple Mojito</span>
+          <span class="drawer-item-price">₹150.00</span>
+        </div>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Lemon Fresh Soda</span>
+          <span class="drawer-item-price">₹110.00</span>
+        </div>
+      </div>
+    </div>
+    <div class="drawer-category" id="menu-milkshakes">
+      <h3 class="drawer-category-title">Milkshakes</h3>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Strawberry Milkshake</span>
+          <span class="drawer-item-price">₹165.00</span>
+        </div>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Berry Blast Milkshake</span>
+          <span class="drawer-item-price">₹165.00</span>
+        </div>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Vanilla Milkshake</span>
+          <span class="drawer-item-price">₹165.00</span>
+        </div>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Mango Milkshake</span>
+          <span class="drawer-item-price">₹165.00</span>
+        </div>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Soy Milk</span>
+          <span class="drawer-item-price">₹50.00</span>
+        </div>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Oat Milk</span>
+          <span class="drawer-item-price">₹50.00</span>
+        </div>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Almond Milk</span>
+          <span class="drawer-item-price">₹80.00</span>
+        </div>
+      </div>
+    </div>
+    <div class="drawer-category" id="menu-hot-beverage">
+      <h3 class="drawer-category-title">Hot Beverage</h3>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Espresso</span>
+          <span class="drawer-item-price">₹160.00</span>
+        </div>
+        <p class="drawer-item-desc">Concentrated coffee, pure, rich, hot.</p>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Double Espresso</span>
+          <span class="drawer-item-price">₹190.00</span>
+        </div>
+        <p class="drawer-item-desc">Concentrated coffee, pure, rich, hot.</p>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Americano</span>
+          <span class="drawer-item-price">₹175.00</span>
+        </div>
+        <p class="drawer-item-desc">Smooth espresso diluted with hot water for a mellow cup</p>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Cappuccino</span>
+          <span class="drawer-item-price">₹190.00</span>
+        </div>
+        <p class="drawer-item-desc">Espresso crowned with velvety steamed milk and foam</p>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Caffè Latte</span>
+          <span class="drawer-item-price">₹190.00</span>
+        </div>
+        <p class="drawer-item-desc">Creamy steamed milk blended with a bold espresso base</p>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Flat White</span>
+          <span class="drawer-item-price">₹190.00</span>
+        </div>
+        <p class="drawer-item-desc">Silky micro-foam and espresso in perfect balance.</p>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Mocha</span>
+          <span class="drawer-item-price">₹220.00</span>
+        </div>
+        <p class="drawer-item-desc">Espresso with steamed milk and a touch of chocolate indulgence.</p>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Cortado</span>
+          <span class="drawer-item-price">₹200.00</span>
+        </div>
+        <p class="drawer-item-desc">Equal parts espresso and warm milk for a smooth, bold sip</p>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Hot Chocolate - Premium</span>
+          <span class="drawer-item-price">₹230.00</span>
+        </div>
+        <p class="drawer-item-desc">Luxurious cocoa finished with steamed milk</p>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Spanish Latte</span>
+          <span class="drawer-item-price">₹230.00</span>
+        </div>
+        <p class="drawer-item-desc">Espresso sweetened with condensed milk and velvety foam.</p>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Macchiato</span>
+          <span class="drawer-item-price">₹200.00</span>
+        </div>
+        <p class="drawer-item-desc">Espresso "stained" with a dollop of frothy milk.</p>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Hot Tea</span>
+          <span class="drawer-item-price">₹230.00</span>
+        </div>
+        <p class="drawer-item-desc">A selection of fine teas, including black, green, and herbal.</p>
+      </div>
+    </div>
+    <div class="drawer-category" id="menu-iced-beverages">
+      <h3 class="drawer-category-title">Iced Beverages</h3>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Iced Americano</span>
+          <span class="drawer-item-price">₹190.00</span>
+        </div>
+        <p class="drawer-item-desc">Espresso poured over cold water and ice for a crisp finish.</p>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Classic Iced Coffee</span>
+          <span class="drawer-item-price">₹220.00</span>
+        </div>
+        <p class="drawer-item-desc">Robust coffee with vanilla ice cream blended w/ ice.</p>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Iced Latte</span>
+          <span class="drawer-item-price">₹220.00</span>
+        </div>
+        <p class="drawer-item-desc">Cold milk and espresso served refreshingly over ice</p>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Iced Mocha</span>
+          <span class="drawer-item-price">₹250.00</span>
+        </div>
+        <p class="drawer-item-desc">Espresso, chocolate, and chilled milk on the rocks</p>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Caramel Iced Coffee</span>
+          <span class="drawer-item-price">₹260.00</span>
+        </div>
+        <p class="drawer-item-desc">Classic iced coffee with a rich caramel drizzle</p>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Nordic Spark</span>
+          <span class="drawer-item-price">₹280.00</span>
+        </div>
+        <p class="drawer-item-desc">Espresso & tonic water</p>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Island Drift</span>
+          <span class="drawer-item-price">₹280.00</span>
+        </div>
+        <p class="drawer-item-desc">Fresh coconut water & espresso</p>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Mediterranean Glow</span>
+          <span class="drawer-item-price">₹280.00</span>
+        </div>
+        <p class="drawer-item-desc">Orange, honey & espresso</p>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Cold Brew With Milk</span>
+          <span class="drawer-item-price">₹280.00</span>
+        </div>
+        <p class="drawer-item-desc">This delicious latte style cold brew has notes of dry fruit, shiraz and caramel.</p>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Vietnamese Style Iced Coffee</span>
+          <span class="drawer-item-price">₹280.00</span>
+        </div>
+        <p class="drawer-item-desc">Our take on the vietnamese classic! Concentrated, dark cold brew poured over ice, topped with sweetened condensed milk.</p>
+      </div>
+    </div>
+    <div class="drawer-category" id="menu-pour-over">
+      <h3 class="drawer-category-title">Pour Over / Aeropress</h3>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Medium Roast</span>
+          <span class="drawer-item-price">₹280.00</span>
+        </div>
+        <p class="drawer-item-desc">Rich chocolate caramel</p>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Medium Dark</span>
+          <span class="drawer-item-price">₹290.00</span>
+        </div>
+        <p class="drawer-item-desc">Berry & chocolate with velvety finish</p>
+      </div>
+      <div class="drawer-item">
+        <div class="drawer-item-top">
+          <span class="drawer-item-title">Mild</span>
+          <span class="drawer-item-price">₹290.00</span>
+        </div>
+        <p class="drawer-item-desc">Banana and berry</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<script>
+  (function() {
+    const openMenuBtn = document.getElementById('openMenuBtn');
+    const closeDrawerBtn = document.getElementById('closeDrawerBtn');
+    const menuDrawer = document.getElementById('menuDrawer');
+    const menuDrawerOverlay = document.getElementById('menuDrawerOverlay');
+    const menuDrawerBody = document.querySelector('.menu-drawer-body');
+    const menuCategoryButtons = document.querySelectorAll('[data-menu-target]');
+
+    function toggleDrawer(show) {
+      if(show) {
+        menuDrawer.classList.add('is-active');
+        menuDrawerOverlay.classList.add('is-active');
+        document.body.style.overflow = 'hidden'; 
+      } else {
+        menuDrawer.classList.remove('is-active');
+        menuDrawerOverlay.classList.remove('is-active');
+        document.body.style.overflow = '';
+      }
+    }
+
+    if (openMenuBtn && closeDrawerBtn && menuDrawer && menuDrawerOverlay) {
+      openMenuBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        toggleDrawer(true);
+      });
+      closeDrawerBtn.addEventListener('click', () => toggleDrawer(false));
+      menuDrawerOverlay.addEventListener('click', () => toggleDrawer(false));
+
+      menuCategoryButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+          const target = document.getElementById(button.dataset.menuTarget);
+
+          if (!target || !menuDrawerBody) {
+            return;
+          }
+
+          const targetTop = target.getBoundingClientRect().top - menuDrawerBody.getBoundingClientRect().top;
+
+          menuDrawerBody.scrollTo({
+            top: menuDrawerBody.scrollTop + targetTop,
+            behavior: 'smooth'
+          });
+        });
+      });
+    }
+  })();
+</script>
 </body>
 </html>
