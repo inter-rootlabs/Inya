@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="INYA Cafe Digital Menu - Browse our selection of specialty coffees, all-day breakfast, and more.">
+  <title>INYA Cafe | Our Menu</title>
+  <link rel="icon" type="image/png" href="logo.png">
+  <link rel="apple-touch-icon" href="logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/menu.css">
+</head>
+<body>
+  <div id="site-header-container"></div>
+
+  <main id="top">
+    <header class="menu-page-header">
+      <div class="container">
+        <h1 class="reveal">Our Menu</h1>
+        <p class="reveal">Prepared with care, served with warmth. Explore our selection of comfort food, curated bakes, and specialty coffees.</p>
+      </div>
+    </header>
+
+    <div class="sticky-control-bar">
+      <div class="controls-container">
+        <div class="search-wrapper">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="searchInput" class="search-input" placeholder="Search dishes, ingredients..." aria-label="Search menu items">
+        </div>
+        
+        <div class="segmented-control" role="group" aria-label="Dietary preference">
+          <button class="segmented-btn" data-diet="all" aria-pressed="true">All</button>
+          <button class="segmented-btn" data-diet="veg" aria-pressed="false">Veg</button>
+          <button class="segmented-btn" data-diet="egg" aria-pressed="false">Egg</button>
+          <button class="segmented-btn" data-diet="non-veg" aria-pressed="false">Non-Veg</button>
+        </div>
+        
+        <div class="quick-filters" role="group" aria-label="Quick filters">
+          <button class="chip" data-filter="rated-4" aria-pressed="false">
+            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+            Rated 4+
+          </button>
+          <button class="chip" data-filter="bestseller" aria-pressed="false">Bestseller</button>
+          <button class="chip" data-filter="chefs-special" aria-pressed="false">Chef's Special</button>
+          <button class="chip" data-filter="new" aria-pressed="false">New</button>
+        </div>
+
+        <select id="sortSelect" class="sort-dropdown" aria-label="Sort menu items">
+          <option value="recommended">Recommended</option>
+          <option value="rating">Rating: High to Low</option>
+          <option value="price-asc">Price: Low to High</option>
+          <option value="price-desc">Price: High to Low</option>
+        </select>
+      </div>
+    </div>
+
+    <nav class="category-nav" aria-label="Menu categories">
+      <div class="category-nav-inner" id="categoryNavInner">
+        <!-- Injected via JS -->
+      </div>
+    </nav>
+
+    <div class="menu-layout container" style="width: var(--container); margin: 0 auto;">
+      <div id="menuGrid" aria-live="polite">
+        <!-- Skeleton loaders while loading -->
+        <div class="menu-section">
+          <div class="grid-container">
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div id="site-footer-container"></div>
+
+  <!-- Item Detail Modal -->
+  <div class="modal-overlay" id="itemModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-content">
+      <button class="modal-close" id="modalClose" aria-label="Close details">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+      
+      <div class="modal-media" id="modalMedia">
+        <!-- Image injected here -->
+      </div>
+      
+      <div class="modal-body">
+        <div id="modalTags" style="display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap;"></div>
+        <h2 class="modal-title" id="modalTitle"></h2>
+        <div class="modal-price" id="modalPrice"></div>
+        
+        <div class="modal-meta" id="modalMeta">
+          <!-- Meta injected here (Diet, time, rating, spice) -->
+        </div>
+        
+        <p class="modal-desc" id="modalDesc"></p>
+        
+        <div class="modal-footer">
+          <button class="modal-nav-btn" id="modalPrev" aria-label="Previous item">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            Prev
+          </button>
+          <button class="modal-nav-btn" id="modalNext" aria-label="Next item">
+            Next
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shared partials logic (header/footer) -->
+  <script src="js/partials.js"></script>
+  <!-- Menu data (fallback when Sanity is not configured) -->
+  <script src="js/menu-data.js"></script>
+  <!-- Sanity client (falls back to local data when not configured) -->
+  <script src="js/sanity-client.js"></script>
+  <!-- Menu page logic -->
+  <script src="js/menu.js"></script>
+</body>
+</html>
